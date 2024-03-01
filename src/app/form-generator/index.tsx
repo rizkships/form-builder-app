@@ -13,8 +13,19 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea';
+import { generateForm } from '@/actions/generateForm';
+import {useFormState, useFormStatus} from 'react-dom'
 
 type Props = {}  
+
+export function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+      <Button type="submit" disabled={pending}>
+        {pending ? "Generating..." : "Generate"}
+      </Button>
+    );
+  }
 
 const FormGenerator = (props: Props) => {
 
@@ -25,7 +36,7 @@ const FormGenerator = (props: Props) => {
     }
     
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+<Dialog open={open} onOpenChange={setOpen}>
   <Button onClick={onFormCreate}>Create Form</Button>
   <DialogContent className='sm:max-w-[425px]'>
     <DialogHeader>
