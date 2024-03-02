@@ -18,6 +18,13 @@ import {useFormState, useFormStatus} from 'react-dom'
 
 type Props = {}  
 
+const initialState: {
+    message: string;
+    data?: any;
+  } = {
+    message: ""
+  }
+
 export function SubmitButton() {
     const { pending } = useFormStatus();
     return (
