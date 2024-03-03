@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import {
     Dialog,
@@ -13,6 +13,7 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea';
+
 import { generateForm } from '@/actions/generateForm';
 import {useFormState, useFormStatus} from 'react-dom'
 
@@ -36,8 +37,17 @@ export function SubmitButton() {
 
 const FormGenerator = (props: Props) => {
 
+    const [state, formAction] = useFormState(generateForm, initialState);
     const [open, setOpen] = useState(false);
-   
+
+    useEffect(() => {
+      if (state.message === "success") {
+        setOpen(false);
+        navigate(state.data.formId);
+      }
+  
+    }, [state.message])
+
     const onFormCreate = () => {
         setOpen(true);
     }
@@ -48,15 +58,16 @@ const FormGenerator = (props: Props) => {
   <DialogContent className='sm:max-w-[425px]'>
     <DialogHeader>
       <DialogTitle>Create New Form</DialogTitle>
-      <form>
+      </DialogHeader>
+      <form action={formAction}>
         <div className='grid gap-4 py-4'>
             <Textarea id='description' name='description' required placeholder='Share what your form is about, who is it for, and what information you would like to collect. And AI will do the magic ✨'/>
         </div>
-      </form>
-    </DialogHeader>
-    <DialogFooter>
+        <DialogFooter>
+        <SubmitButton />
         <Button variant="link">Create Manually</Button>
-    </DialogFooter>
+        </DialogFooter>
+    </form>
   </DialogContent>
 </Dialog>
 
